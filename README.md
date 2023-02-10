@@ -11,4 +11,4 @@ El fin de este proyecto es realizar un [crud](https://es.wikipedia.org/wiki/CRUD
 - [CRUD](https://es.wikipedia.org/wiki/CRUD)
 - [DAO-DTO](https://rjcodeadvance.com/patrones-de-software-que-es-patron-de-diseno-parte-2/#:~:text=Patrón%20Data%20Transfer%20Object%20(DTO,a%20la%20fuente%20de%20datos. )
 - [Persintencia](https://www.adictosaltrabajo.com/2007/03/15/persistencia-java/)
-> Para poder utilizar este 
+> Para poder manipular este proyecto es necesario usar [EclipseIDE](https://www.eclipse.org/downloads/)

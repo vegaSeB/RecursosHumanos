@@ -104,7 +104,13 @@ public class Controller implements ActionListener, MouseWheelListener {
 			String nombre = vi.getCrear().getNombre().getText();
 			String apellido = vi.getCrear().getApellido().getText();
 			String cargo = vi.getCrear().getCargo().getText();
-			String ced = vi.getCrear().getCedula().getText();
+			String ced="";
+			try {
+				ced = vi.getCrear().getCedula().getText();				
+			} catch ( NumberFormatException e2) {
+				JOptionPane.showInternalMessageDialog(null, "La cedula no esta en formato valido", "ERROR", JOptionPane.ERROR_MESSAGE, null);
+				return;
+			}
 			String ed = vi.getCrear().getEdad().getText();
 			if (nombre.contentEquals("") || apellido.contentEquals("") || cargo.contentEquals("")
 					|| ced.contentEquals("") || ed.contentEquals("")) {

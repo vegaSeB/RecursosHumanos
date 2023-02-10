@@ -19,6 +19,12 @@ public class FramePrincipal extends JFrame {
 	public static final String BUSCAR = "BUSCAR";
 	public static final String MODIFICAR = "MODIFICAR";
 
+	/**
+	 * Este es el metodo constructor de la clase, en este se inicializan todos los elementos graficos, asigna el action listener
+	 *  a todos los elementos, además de configurar el frame
+	 *  
+	 *  @param con: es el action listener de los elementos graficos
+	 */
 	public FramePrincipal(Controller con) {
 		
 		

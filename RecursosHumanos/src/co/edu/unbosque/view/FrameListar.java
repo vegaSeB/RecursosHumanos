@@ -14,6 +14,14 @@ public class FrameListar extends JFrame {
 	private JButton atras;
 	public static final String ATRAS = "ATRAS";
 	
+	/**
+	 * Este es el metodo constructor de la clase, en este se inicializan todos los elementos graficos, asigna el action listener
+	 *  a todos los elementos, además de configurar el frame
+	 *  
+	 *  @param con: es el action listener de los elementos graficos
+	 *  @param wheel: es el mouse wheel listener del scroll
+	 *  
+	 */
 	public FrameListar(MouseWheelListener wheel, ActionListener con) {
 		
 		panel = new ArrayList<PanelLista>();
@@ -34,12 +42,24 @@ public class FrameListar extends JFrame {
 		
 	}
 	
+	/**
+	 * Este metodo cada vez que se realiza agrega un nuevo panel al arraylist
+	 *  
+	 *  @param nom: el nombre y apellido que se van a mostrar en el panel
+	 *  @param car: el cargo que se mostrara en el panel
+	 *  @param ed: la edad que se mostrara en el panel
+	 *  @param id: la cedula que se mostrara en el panel
+	 *  
+	 */
 	public void rellenarDatos(String nom, String car, int ed, long id) {
 		
 		panel.add(new PanelLista(nom, car, ed, id));
 	
 	}
 	
+	/**
+	 * El metodo configura el panel del scroll y añade todos los paneles de tipo "PanelLista"
+	 */
 	public void generarScroll() {
 		
 		scroll.setBounds(80, 0, 510, ((panel.size()*50)+5));
@@ -53,6 +73,14 @@ public class FrameListar extends JFrame {
 		
 	}
 	
+	/**
+	 * Este es el metodo constructor de la clase, en este se inicializan todos los elementos graficos, asigna el action listener
+	 *  a todos los elementos, además de configurar el frame
+	 *  
+	 *  @param y: la unidades que se mueve la rueda del mouse en el eje y
+	 *  @param q: la dirección en la que se mueve la rueda del mouse
+	 *  
+	 */
 	public void movimientoScroll(int y, int q) {
 		
 		if (panel.size() < 14) {}
@@ -69,6 +97,9 @@ public class FrameListar extends JFrame {
 		}
 	}
 	
+	/**
+	 * Elimina todos los elmentos graficos del panel scroll, y todos "PanelLista" del arrayList
+	 */
 	public void limpiarTodo() {
 		
 		scroll.removeAll();

@@ -22,6 +22,9 @@ public class Controller implements ActionListener, MouseWheelListener {
 	private int op;
 	private long eliminar;
 
+	/**
+	 * Este es el metodo constructor de la clase controller, aqui se inicializan objetos de la vista y el modelo 
+	 */
 	public Controller() {
 
 		vi = new View(this);
@@ -33,7 +36,13 @@ public class Controller implements ActionListener, MouseWheelListener {
 		eliminar = 0;
 	}
 
+	
 	@Override
+	/**
+	 * El action performed se encarga de que al momento de hacer una accion, en este caso un click en cualquier boton de los frames
+	 * 
+	 * @param e: la accion que se realiza
+	 */
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println(e.getActionCommand());
@@ -238,6 +247,11 @@ public class Controller implements ActionListener, MouseWheelListener {
 			}
 
 	@Override
+	/**
+	 * EL metodo decide que hacer en caso de que la rueda del mouse se mueva
+	 * 
+	 * @param e: la accion de mover la rueda del mouse
+	 */
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(vi.getLista())) {

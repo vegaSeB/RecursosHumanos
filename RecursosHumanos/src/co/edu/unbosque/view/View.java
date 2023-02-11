@@ -7,7 +7,7 @@ import co.edu.unbosque.controller.Controller;
 public class View{
 	
 	FramePrincipal principal;
-	FrameCrear Crear;
+	FrameCrear crear;
 	FrameListar lista;
 	FrameCandidato candidato;
 	FrameEliminar eliminar;
@@ -21,7 +21,7 @@ public class View{
 	public View(Controller con) {
 		
 		this.principal = new FramePrincipal(con);
-		this.Crear = new FrameCrear(con);
+		this.crear = new FrameCrear(con);
 		this.lista = new FrameListar(con,con);
 		this.candidato = new FrameCandidato(con);
 		this.eliminar = new FrameEliminar(con);
@@ -44,7 +44,7 @@ public class View{
 	 *  @return retorna el frame crear
 	 */
 	public FrameCrear getCrear() {
-		return Crear;
+		return crear;
 	}
 	
 	/**

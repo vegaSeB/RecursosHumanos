@@ -325,6 +325,7 @@ public class FrameCrear extends JFrame {
 	 */
 	public void modificar() {
 		
+		
 		crear.setText("Modificar");
 		crear.setActionCommand(MODIFICAR);
 		

@@ -20,10 +20,11 @@ public class Controller implements ActionListener, MouseWheelListener {
 	private CandidatoDAO canDAO;
 	private ArrayList<CandidatoDTO> lst;
 	private int op;
-	private long eliminar;
+	private long eliminar, modificar;
 
 	/**
-	 * Este es el metodo constructor de la clase controller, aqui se inicializan objetos de la vista y el modelo 
+	 * Este es el metodo constructor de la clase controller, aqui se inicializan
+	 * objetos de la vista y el modelo
 	 */
 	public Controller() {
 
@@ -34,12 +35,13 @@ public class Controller implements ActionListener, MouseWheelListener {
 		lst = arr.leerArchivo();
 		op = 0;
 		eliminar = 0;
+		modificar = 0;
 	}
 
-	
 	@Override
 	/**
-	 * El action performed se encarga de que al momento de hacer una accion, en este caso un click en cualquier boton de los frames
+	 * El action performed se encarga de que al momento de hacer una accion, en este
+	 * caso un click en cualquier boton de los frames
 	 * 
 	 * @param e: la accion que se realiza
 	 */
@@ -58,12 +60,15 @@ public class Controller implements ActionListener, MouseWheelListener {
 			op = 3;
 			vi.getPrincipal().setVisible(false);
 			String aux = vi.buscar();
-			if (aux.contentEquals("")) {
-				JOptionPane.showMessageDialog(null, "Debe ingresar algun valor");
+			if (aux == null) {
+				vi.error("Debe ingresar algun valor");
+				vi.getPrincipal().setVisible(true);
+			} else if (aux.contentEquals("")) {
+				vi.error("Debe ingresar algun valor");
 				vi.getPrincipal().setVisible(true);
 			} else {
 				if (canDAO.buscarUnCandidato(Long.parseLong(aux), lst) == null) {
-					JOptionPane.showMessageDialog(null, "La cedula no coincide con ningun candidato");
+					vi.error("La cedula no coincide con ningun candidato");
 					vi.getPrincipal().setVisible(true);
 				} else {
 					CandidatoDTO del = canDAO.buscarUnCandidato(Long.parseLong(aux), lst);
@@ -80,14 +85,16 @@ public class Controller implements ActionListener, MouseWheelListener {
 			vi.getPrincipal().setVisible(false);
 			String aux = vi.buscar();
 			if (aux == null) {
-				JOptionPane.showMessageDialog(null, "Debe ingresar algun valor");
+				vi.error("Debe ingresar algun valor");
 				vi.getPrincipal().setVisible(true);
 			} else if (aux.contentEquals("")) {
-				JOptionPane.showMessageDialog(null, "Debe ingresar algun valor");
+				vi.error("Debe ingresar algun valor");
 				vi.getPrincipal().setVisible(true);
+			} else if (soloNumeros(aux) == false) {
+				vi.error("La cedula no debe contener caracteres especiales");
 			} else {
 				if (canDAO.buscarUnCandidato(Long.parseLong(aux), lst) == null) {
-					JOptionPane.showMessageDialog(null, "La cedula no coincide con ningun candidato");
+					vi.error("La cedula no coincide con ningun candidato");
 					vi.getPrincipal().setVisible(true);
 				} else {
 					CandidatoDTO del = canDAO.buscarUnCandidato(Long.parseLong(aux), lst);
@@ -104,20 +111,24 @@ public class Controller implements ActionListener, MouseWheelListener {
 			String nombre = vi.getCrear().getNombre().getText();
 			String apellido = vi.getCrear().getApellido().getText();
 			String cargo = vi.getCrear().getCargo().getText();
-			String ced="";
-			try {
-				ced = vi.getCrear().getCedula().getText();				
-			} catch ( NumberFormatException e2) {
-				JOptionPane.showInternalMessageDialog(null, "La cedula no esta en formato valido", "ERROR", JOptionPane.ERROR_MESSAGE, null);
-				return;
-			}
+			String ced = vi.getCrear().getCedula().getText();
 			String ed = vi.getCrear().getEdad().getText();
 			if (nombre.contentEquals("") || apellido.contentEquals("") || cargo.contentEquals("")
 					|| ced.contentEquals("") || ed.contentEquals("")) {
-				JOptionPane.showMessageDialog(null, "Por favor ingrese todos los datos");
+				vi.error("Por favor ingrese todos los datos");
+			} else if (soloNumeros(ced) == false) {
+				vi.error("La cedula no debe contener caracteres especiales");
+			} else if (soloNumeros(ed) == false) {
+				vi.error("La edad no debe contener caracteres especiales");
 			} else if (Integer.parseInt(vi.getCrear().getEdad().getText()) < 0
 					|| Integer.parseInt(vi.getCrear().getEdad().getText()) > 100) {
-				JOptionPane.showMessageDialog(null, "La edad no es valida");
+				vi.error("La edad no es valida");
+			} else if (soloLetras(nombre) == false) {
+				vi.error("El nombre solo debe contener letras");
+			} else if (soloLetras(apellido) == false) {
+				vi.error("El apellido solo debe contener letras");
+			} else if (soloLetras(cargo) == false) {
+				vi.error("El cargo solo debe tener letra");
 			} else {
 				long cedula = Long.parseLong(vi.getCrear().getCedula().getText());
 				int edad = Integer.parseInt(vi.getCrear().getEdad().getText());
@@ -130,7 +141,6 @@ public class Controller implements ActionListener, MouseWheelListener {
 
 				vi.getPrincipal().setVisible(true);
 				vi.getCrear().setVisible(false);
-
 			}
 		} else if (pt.equals("ATRAS")) {
 			if (op == 1) {
@@ -158,13 +168,13 @@ public class Controller implements ActionListener, MouseWheelListener {
 				vi.getCandidato().getEdad().setText("");
 				vi.getPrincipal().setVisible(true);
 				vi.getCandidato().setVisible(false);
-				
-			}else if (op == 4) {
-				
+
+			} else if (op == 4) {
+
 				vi.getLista().setVisible(false);
 				vi.getLista().limpiarTodo();
 				vi.getPrincipal().setVisible(true);
-				
+
 			}
 		} else if (pt.equals("ELIMINAR2")) {
 			canDAO.eliminarUsuario(eliminar, lst);
@@ -176,81 +186,82 @@ public class Controller implements ActionListener, MouseWheelListener {
 			vi.getPrincipal().setVisible(true);
 			vi.getEliminar().setVisible(false);
 
-		}
-		else if (pt.equals("LISTAR")) {
-			
+		} else if (pt.equals("LISTAR")) {
+
 			op = 4;
-			for(int i = 0; i < lst.size(); i++) {
-				
-				vi.getLista().rellenarDatos(lst.get(i).getNombre()+ " " + lst.get(i).getApellido(), lst.get(i).getCargo(), lst.get(i).getEdad(), lst.get(i).getCedula());
-				
+			for (int i = 0; i < lst.size(); i++) {
+
+				vi.getLista().rellenarDatos(lst.get(i).getNombre() + " " + lst.get(i).getApellido(),
+						lst.get(i).getCargo(), lst.get(i).getEdad(), lst.get(i).getCedula());
+
 			}
-			
+
 			vi.getLista().generarScroll();
 			vi.getPrincipal().setVisible(false);
 			vi.getLista().setVisible(true);
-			
-		}else if(pt.equals("MODIFICAR")) {
-			
+
+		} else if (pt.equals("MODIFICAR")) {
+
 			op = 1;
-			
+
 			vi.getPrincipal().setVisible(false);
 			String aux = vi.buscar();
 			if (aux == null) {
-				JOptionPane.showMessageDialog(null, "Debe ingresar algun valor");
+				vi.error("Debe ingresar algun valor");
 				vi.getPrincipal().setVisible(true);
 			} else if (aux.contentEquals("")) {
-				JOptionPane.showMessageDialog(null, "Debe ingresar algun valor");
+				vi.error("Debe ingresar algun valor");
 				vi.getPrincipal().setVisible(true);
 			} else {
 				if (canDAO.buscarUnCandidato(Long.parseLong(aux), lst) == null) {
-					JOptionPane.showMessageDialog(null, "La cedula no coincide con ningun candidato");
+					vi.error("La cedula no coincide con ningun candidato");
 					vi.getPrincipal().setVisible(true);
 				} else {
-			CandidatoDTO mod = canDAO.buscarUnCandidato(Long.parseLong(aux), lst);
-			
-			vi.getCrear().getNombre().setText(mod.getNombre());
-			vi.getCrear().getApellido().setText(mod.getApellido());
-			vi.getCrear().getCargo().setText(mod.getCargo());
-			vi.getCrear().getCedula().setText(mod.getCedula()+"");
-			vi.getCrear().getEdad().setText(mod.getEdad()+"");
-			
-			vi.getCrear().modificar();
-			vi.getPrincipal().setVisible(false);
-			vi.getCrear().setVisible(true);
-			
+					CandidatoDTO mod = canDAO.buscarUnCandidato(Long.parseLong(aux), lst);
+					modificar = mod.getCedula();
+					vi.getCrear().getNombre().setText(mod.getNombre());
+					vi.getCrear().getApellido().setText(mod.getApellido());
+					vi.getCrear().getCargo().setText(mod.getCargo());
+					vi.getCrear().getCedula().setText(mod.getCedula() + "");
+					vi.getCrear().getEdad().setText(mod.getEdad() + "");
+
+					vi.getCrear().modificar();
+					vi.getPrincipal().setVisible(false);
+					vi.getCrear().setVisible(true);
+
 				}
 			}
-			
-		}else if(pt.equals("MODIFICAR2")) {
-			
+
+		} else if (pt.equals("MODIFICAR2")) {
+
 			String nombre = vi.getCrear().getNombre().getText();
 			String apellido = vi.getCrear().getApellido().getText();
 			String cargo = vi.getCrear().getCargo().getText();
 			String ced = vi.getCrear().getCedula().getText();
 			String ed = vi.getCrear().getEdad().getText();
+			long ced2 = Long.parseLong(ced);
 			if (nombre.contentEquals("") || apellido.contentEquals("") || cargo.contentEquals("")
 					|| ced.contentEquals("") || ed.contentEquals("")) {
-				JOptionPane.showMessageDialog(null, "Por favor ingrese todos los datos");
+				vi.error("Por favor ingrese todos los datos");
 			} else if (Integer.parseInt(vi.getCrear().getEdad().getText()) < 0
 					|| Integer.parseInt(vi.getCrear().getEdad().getText()) > 100) {
-				JOptionPane.showMessageDialog(null, "La edad no es valida");
-			}else {
-				
-				canDAO.modificar_Candidato(nombre, apellido, cargo, Long.parseLong(ced), Integer.parseInt(ed), lst);
-				
+				vi.error("La edad no es valida");
+			} else {
+
+				canDAO.modificar_Candidato(nombre, apellido, cargo, ced2, modificar, Integer.parseInt(ed), lst);
+
 			}
-			
+
 			vi.getCrear().getNombre().setText("");
 			vi.getCrear().getApellido().setText("");
 			vi.getCrear().getCargo().setText("");
 			vi.getCrear().getCedula().setText("");
 			vi.getCrear().getEdad().setText("");
-			
+
 			vi.getPrincipal().setVisible(true);
-			vi.getCrear().setVisible(false); 
-				}
-			}
+			vi.getCrear().setVisible(false);
+		}
+	}
 
 	@Override
 	/**
@@ -260,16 +271,33 @@ public class Controller implements ActionListener, MouseWheelListener {
 	 */
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource().equals(vi.getLista())) {
-			
-			if(e.getWheelRotation() > 0) {
+		if (e.getSource().equals(vi.getLista())) {
+
+			if (e.getWheelRotation() > 0) {
 				vi.getLista().movimientoScroll(e.getUnitsToScroll(), 1);
-			}else {
+			} else {
 				vi.getLista().movimientoScroll(e.getUnitsToScroll(), 2);
 			}
-			
+
 		}
-		
+
+	}
+
+	public boolean soloNumeros(String pt) {
+		try {
+			Long aux = Long.parseLong(pt);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public boolean soloLetras(String pt) {
+		if (!pt.matches("[a-zA-Z ]*")) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 }

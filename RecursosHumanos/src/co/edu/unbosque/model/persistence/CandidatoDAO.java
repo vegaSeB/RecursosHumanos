@@ -63,17 +63,17 @@ public class CandidatoDAO {
 		}
 	}
 	
-	public void modificar_Candidato(String nombre, String apellido, String cargo, long cedula, int edad,
+	public void modificar_Candidato(String nombre, String apellido, String cargo, long cedula1, long cedula2, int edad,
 			ArrayList<CandidatoDTO> lst) {
 
-		CandidatoDTO agregar = new CandidatoDTO(nombre, apellido, cargo, cedula, edad);
+		CandidatoDTO agregar = new CandidatoDTO(nombre, apellido, cargo, cedula1, edad);
 		
-		String aux = cedula + "";
+		String aux = cedula2 + "";
 		
 		if (!aux.equals("")) {
-			if (buscarUnCandidato(cedula, lst) != null) {
+			if (buscarUnCandidato(cedula2, lst) != null) {
 				try {
-					CandidatoDTO e = buscarUnCandidato(cedula, lst);
+					CandidatoDTO e = buscarUnCandidato(cedula2, lst);
 					lst.set(lst.indexOf(e), agregar);
 					archivo.getArchivo().delete();
 					archivo.getArchivo().createNewFile();
